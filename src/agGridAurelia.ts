@@ -6,6 +6,7 @@ import {
     ComponentAttached,
     ComponentDetached,
     children,
+    child,
     Container,
     ViewResources,
     TaskQueue
@@ -14,6 +15,7 @@ import {Grid, GridOptions, GridApi, ColumnApi, GridParams, ComponentUtil} from "
 import {AureliaFrameworkFactory} from "./aureliaFrameworkFactory";
 import {AgGridColumn} from "./agGridColumn";
 import {generateBindables} from "./agUtils";
+import {AgFullWidthRowTemplate} from './agTemplate';
 
 interface IPropertyChanges {
     [key: string]: any
@@ -44,6 +46,9 @@ export class AgGridAurelia implements ComponentAttached, ComponentDetached {
     @children('ag-grid-column')
     public columns: AgGridColumn[] = [];
 
+    @child('ag-full-width-row-template')
+    public fullWidthRowTemplate: AgFullWidthRowTemplate;
+
     constructor(element: Element,
                 private taskQueue: TaskQueue,
                 private auFrameworkFactory: AureliaFrameworkFactory,
@@ -69,6 +74,7 @@ export class AgGridAurelia implements ComponentAttached, ComponentDetached {
     initGrid(): void {
         this._initialised = false;
         this._destroyed = false;
+        let promises: Promise<void>[] = [];
 
         this.auFrameworkFactory.setContainer(this.container);
         this.auFrameworkFactory.setViewResources(this.viewResources);
@@ -81,16 +87,38 @@ export class AgGridAurelia implements ComponentAttached, ComponentDetached {
 
         if (this.columns && this.columns.length > 0) {
             this.gridOptions.columnDefs = this.columns
-                .map((column: AgGridColumn) => {
-                    return column.toColDef();
-                });
+              .map((column: AgGridColumn) => {
+                  let colDef = column.toColDef();
+                  if (colDef.cellRendererFramework) {
+                      promises.push(
+                          this.auFrameworkFactory.getCellRendererViewFactory(colDef));
+                  }
+                  if (colDef.cellEditorFramework) {
+                      promises.push(
+                          this.auFrameworkFactory.getCellEditorViewFactory(colDef));
+                  }
+
+                  return colDef;
+              });
         }
 
-        new Grid(this._nativeElement, this.gridOptions, this.gridParams);
-        this.api = this.gridOptions.api;
-        this.columnApi = this.gridOptions.columnApi;
+        if (this.fullWidthRowTemplate) {
+            this.gridOptions.fullWidthCellRendererFramework =
+                {template: this.fullWidthRowTemplate.template};
+        }
 
-        this._initialised = true;
+        if (this.gridOptions.fullWidthCellRendererFramework) {
+            promises.push(this.auFrameworkFactory.getFullWidthCellRendererViewFactory(this.gridOptions));
+        }
+
+        //wait for any promises to resolve
+        Promise.all(promises).then(() => {
+            new Grid(this._nativeElement, this.gridOptions, this.gridParams);
+            this.api = this.gridOptions.api;
+            this.columnApi = this.gridOptions.columnApi;
+
+            this._initialised = true;
+        });
     }
 
     /**
@@ -124,7 +152,8 @@ export class AgGridAurelia implements ComponentAttached, ComponentDetached {
         let emitter = (<any>this)[eventType];
         if (emitter) {
             emitter(event);
-        } else {
+        }
+        else {
             console.log('ag-Grid-aurelia: could not find EventEmitter: ' + eventType);
         }
     }
