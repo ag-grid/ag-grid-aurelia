@@ -20,13 +20,13 @@ import {generateBindables} from "./agUtils";
     "suppressAutoSize", "suppressToolPanel", "suppressKeyboardEvent", "enableRowGroup", "enablePivot", "enableValue",
     "editable", "suppressNavigable", "newValueHandler", "volatile", "filter", "filterFramework", "filterParams",
     "cellClassRules", "onCellValueChanged", "onCellClicked", "onCellDoubleClicked", "onCellContextMenu", "icons",
-    "enableCellChangeFlash", "headerName", "columnGroupShow", "headerClass", "children", "groupId", "openByDefault",
+    "enableCellChangeFlash", "headerName", "columnGroupShow", "headerClass", "toolPanelClass", "children", "groupId", "openByDefault",
     "marryChildren", "headerCheckboxSelection", "headerCheckboxSelectionFilteredOnly", "type", "tooltipField", "valueSetter",
     "pinnedRowCellRenderer", "pinnedRowCellRendererFramework", "pinnedRowCellRendererParams", "valueFormatter",
     "pinnedRowValueFormatter", "valueParser", "allowedAggFuncs", "rowGroup", "showRowGroup", "pivot", "equals", "pivotComparator",
     "menuTabs", "colSpan", "suppressPaste", "template", "templateUrl", "pivotValueColumn", "pivotTotalColumnIds", "headerComponent",
     "headerComponentFramework", "headerComponentParams", "floatingFilterComponent", "floatingFilterComponentParams",
-    "floatingFilterComponentFramework"])
+    "floatingFilterComponentFramework", "rowDrag"])
 // <slot> is required for @children to work.  https://github.com/aurelia/templating/issues/451#issuecomment-254206622
 @inlineView(`<template><slot></slot></template>`)
 @autoinject()
