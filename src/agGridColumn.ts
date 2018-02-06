@@ -132,8 +132,10 @@ export class AgGridColumn {
     private createColDefFromGridColumn(): ColDef {
         let colDef: ColDef = {};
         for (let prop in this) {
-            let colDefProperty = this.mappedColumnProperties[prop] ? this.mappedColumnProperties[prop] : prop;
-            (<any>colDef)[colDefProperty] = (<any>this)[prop];
+            if (typeof (<any>this)[prop] !== "undefined") {
+                let colDefProperty = this.mappedColumnProperties[prop] ? this.mappedColumnProperties[prop] : prop;
+                (<any>colDef)[colDefProperty] = (<any>this)[prop];
+            }
         }
         delete (<any>colDef).childColumns;
         return colDef;
