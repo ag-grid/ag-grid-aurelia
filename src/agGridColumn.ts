@@ -80,21 +80,12 @@ export class AgGridColumn {
             }
         };
 
-        const editorAction = (templateName:string) => {
-            if (colDef.editable === undefined) {
-                colDef.editable = true;
-            }
-
-            defaultAction(templateName);
-        };
-
         const templates : any = {
             cellTemplate: {
                 frameworkName: 'cellRendererFramework'
             },
             editorTemplate: {
-                frameworkName: 'cellEditorFramework',
-                action: editorAction
+                frameworkName: 'cellEditorFramework'
             },
             filterTemplate: {
                 frameworkName: 'filterFramework'
