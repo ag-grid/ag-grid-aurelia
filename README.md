@@ -3,7 +3,7 @@ ag-Grid Aurelia Component
 
 This project contains the Aurelia Component for use with ag-Grid.
 
-**This repository is now deprecated.** Please refer to the new mono-repo location here: https://github.com/ag-grid/ag-grid, with this specific Framework Project information here: [ag-grid-aurelia](https://github.com/ag-grid/ag-grid/blob/master/packages/ag-grid-aurelia/).
+**This repository is now deprecated.** Please refer to the new mono-repo location here: https://github.com/ag-grid/ag-grid, with this specific Framework Project living here: [ag-grid-aurelia](https://github.com/ag-grid/ag-grid/blob/master/packages/ag-grid-aurelia/).
 
 Version 18.0.0 will be the last version in this repository. All future versions will be in the repository above.
 
