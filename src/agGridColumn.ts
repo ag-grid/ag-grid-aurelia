@@ -80,21 +80,12 @@ export class AgGridColumn {
             }
         };
 
-        const editorAction = (templateName:string) => {
-            if (colDef.editable === undefined) {
-                colDef.editable = true;
-            }
-
-            defaultAction(templateName);
-        };
-
         const templates : any = {
             cellTemplate: {
                 frameworkName: 'cellRendererFramework'
             },
             editorTemplate: {
-                frameworkName: 'cellEditorFramework',
-                action: editorAction
+                frameworkName: 'cellEditorFramework'
             },
             filterTemplate: {
                 frameworkName: 'filterFramework'
@@ -132,8 +123,10 @@ export class AgGridColumn {
     private createColDefFromGridColumn(): ColDef {
         let colDef: ColDef = {};
         for (let prop in this) {
-            let colDefProperty = this.mappedColumnProperties[prop] ? this.mappedColumnProperties[prop] : prop;
-            (<any>colDef)[colDefProperty] = (<any>this)[prop];
+            if (typeof (<any>this)[prop] !== "undefined") {
+                let colDefProperty = this.mappedColumnProperties[prop] ? this.mappedColumnProperties[prop] : prop;
+                (<any>colDef)[colDefProperty] = (<any>this)[prop];
+            }
         }
         delete (<any>colDef).childColumns;
         return colDef;
